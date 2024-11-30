@@ -45,7 +45,8 @@ resource "aws_iam_policy" "lambda_policy" {
           "dynamodb:Query",
           "dynamodb:Scan",
           "dynamodb:UpdateItem",
-          "dynamodb:DescribeTable"
+          "dynamodb:DescribeTable",
+          "sqs:*"
         ]
         Resource = "*"
       }
