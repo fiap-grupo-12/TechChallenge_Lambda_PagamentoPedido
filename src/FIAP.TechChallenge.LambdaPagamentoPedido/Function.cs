@@ -21,6 +21,7 @@ namespace FIAP.TechChallenge.LambdaPagamentoPedido
     {
         private readonly IDynamoDBContext _context;
         private readonly IAmazonSQS amazonSQS;
+        private readonly string _url;
         /// <summary>
         /// Default constructor. This constructor is used by Lambda to construct the instance. When invoked in a Lambda environment
         /// the AWS credentials will come from the IAM role associated with the function and the AWS region will be set to the
@@ -31,6 +32,7 @@ namespace FIAP.TechChallenge.LambdaPagamentoPedido
             IAmazonDynamoDB amazonDynamo = new AmazonDynamoDBClient(RegionEndpoint.USEast1);
             _context = new DynamoDBContext(amazonDynamo);
             amazonSQS = new AmazonSQSClient(RegionEndpoint.USEast1);
+            _url = Environment.GetEnvironmentVariable("url_sqs_atualiza_pagamento_pedido");
         }
 
 
@@ -47,8 +49,6 @@ namespace FIAP.TechChallenge.LambdaPagamentoPedido
             {
                 await ProcessMessageAsync(message, context);
             }
-
-            //amazonSQS.DeleteMessageAsync(new DeleteMessageRequest() { QueueUrl });
         }
 
         private async Task ProcessMessageAsync(SQSEvent.SQSMessage message, ILambdaContext context)
@@ -63,6 +63,8 @@ namespace FIAP.TechChallenge.LambdaPagamentoPedido
 
             await repository.Update(pedido, request.IdPedido);
 
+            await amazonSQS.DeleteMessageAsync(new DeleteMessageRequest() { QueueUrl = _url, ReceiptHandle = message.ReceiptHandle });
+            
             await Task.CompletedTask;
         }
     }

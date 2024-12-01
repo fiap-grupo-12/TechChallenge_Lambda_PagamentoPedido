@@ -10,6 +10,11 @@ terraform {
   }
 }
 
+# Definir a fila SQS
+data "aws_sqs_queue" "atualiza_pagamento" {
+  name = "sqs_atualiza_pagamento_pedido"
+}
+
 resource "aws_iam_role" "lambda_execution_role" {
   name = "lambda_pagamento_pedido_execution_role"
 
@@ -69,4 +74,9 @@ resource "aws_lambda_function" "pedido_function" {
   # Código armazenado no S3
   s3_bucket = "code-lambdas-functions"
   s3_key    = "lambda_pagamento_pedido.zip"
+  environment {
+    variables = {
+      url_sqs_atualiza_pagamento_pedido = data.aws_sqs_queue.atualiza_pagamento.id
+    }
+  }
 }
