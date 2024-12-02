@@ -4,15 +4,18 @@ using System.Diagnostics.CodeAnalysis;
 namespace FIAP.TechChallenge.LambdaPagamentoPedido.Domain.Entities
 {
     [ExcludeFromCodeCoverage]
-    public class ItemDePedido : EntityBase
+    public class ItemDePedido
     {
-        [DynamoDBProperty("Nome")]
+        [DynamoDBProperty("id")]
+        public int Id { get; set; }
+
+        [DynamoDBProperty("nome")]
         public string Nome { get; set; }
 
-        [DynamoDBProperty("Valor")]
+        [DynamoDBProperty("valor")]
         public double Valor { get; set; }
 
-        [DynamoDBProperty("Quantidade")]
+        [DynamoDBProperty("quantidade")]
         public int Quantidade { get; set; }
     }
 
