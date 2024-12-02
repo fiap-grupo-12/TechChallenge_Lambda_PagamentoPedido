@@ -59,7 +59,7 @@ namespace FIAP.TechChallenge.LambdaPagamentoPedido
 
             var pedido = await repository.GetById(request.IdPedido);
 
-            pedido.StatusPagamento = Enum.Parse<StatusPagamento>(request.StatusPagamento);
+            pedido.StatusPagamento = Enum.Parse<StatusPagamento>(request.StatusPagamento.ToString());
 
             await repository.Update(pedido, request.IdPedido);
 

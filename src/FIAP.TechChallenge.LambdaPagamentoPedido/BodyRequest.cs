@@ -13,6 +13,6 @@ namespace FIAP.TechChallenge.LambdaPagamentoPedido
         public string QrCode { get; set; }
 
         [JsonProperty("statusPagamento")]
-        public string StatusPagamento { get; set; }
+        public int StatusPagamento { get; set; }
     }
 }
